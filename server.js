@@ -24,7 +24,12 @@ const io = new Server(httpServer, {
 const activeRooms = new Map();
 
 // Middleware
-app.use(cors());
+// Configure CORS to allow the deployed frontend origin(s)
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Routes
