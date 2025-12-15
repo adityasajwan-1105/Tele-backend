@@ -11,7 +11,7 @@ const app = express();
 const httpServer = http.createServer(app);
 const allowedOrigins = process.env.CLIENT_ORIGIN
   ? process.env.CLIENT_ORIGIN.split(',').map(origin => origin.trim())
-  : ['http://localhost:5173', 'https://tele-frontend-f6b9tn4op-aditya-sajwan-s-projects.vercel.app/'];
+  : ['http://localhost:5173', 'http://localhost:4173'];
 
 const io = new Server(httpServer, {
   cors: {
@@ -33,6 +33,15 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+
+// Root route (for base URL health/info)
+app.get('/', (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'Telemedicine backend is running',
+    docs: '/api/health'
+  });
+});
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
