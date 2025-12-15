@@ -11,7 +11,7 @@ const app = express();
 const httpServer = http.createServer(app);
 const allowedOrigins = process.env.CLIENT_ORIGIN
   ? process.env.CLIENT_ORIGIN.split(',').map(origin => origin.trim())
-  : ['http://localhost:5173'];
+  : ['http://localhost:5173', 'https://tele-frontend-f6b9tn4op-aditya-sajwan-s-projects.vercel.app/'];
 
 const io = new Server(httpServer, {
   cors: {
@@ -24,9 +24,11 @@ const io = new Server(httpServer, {
 const activeRooms = new Map();
 
 // Middleware
-// Configure CORS to allow the deployed frontend origin(s)
+// Configure CORS to allow browser requests
+// NOTE: This is permissive (allows any origin). For stricter security,
+//       pass an explicit list of allowed origins instead.
 app.use(cors({
-  origin: allowedOrigins,
+  origin: true,
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
   credentials: true
 }));
