@@ -180,6 +180,46 @@ router.post('/reject-doctor/:doctorId', isAdmin, async (req, res) => {
   }
 });
 
+// Get all patients
+router.get('/all-patients', isAdmin, async (req, res) => {
+  try {
+    const patients = await User.find({ role: 'patient' })
+      .select('-password')
+      .sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      patients
+    });
+  } catch (error) {
+    console.error('Error fetching patients:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
+});
+
+// Get all doctors (all statuses)
+router.get('/all-doctors', isAdmin, async (req, res) => {
+  try {
+    const doctors = await User.find({ role: 'doctor' })
+      .select('-password')
+      .sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      doctors
+    });
+  } catch (error) {
+    console.error('Error fetching doctors:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
+});
+
 // Get dashboard statistics
 router.get('/stats', isAdmin, async (req, res) => {
   try {
